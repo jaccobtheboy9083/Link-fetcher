@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0a16">
+  <meta name="description" content="Temporary private link collection workspace with automatic live updates.">
+  <title>Link Fetcher | Live Collection</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-symbol">L<span>F</span></span><span class="brand-label">LINK <strong>FETCHER</strong><small>PRIVATE WORKSPACE / 01</small></span></div>
+      <div class="topright"><span class="sync-indicator"><span class="pulse"></span><span id="connection">STANDBY</span></span><button id="lockButton" class="quiet-btn" hidden type="button">Lock <span aria-hidden="true">↗</span></button></div>
+    </header>
+
+    <main>
+      <section id="gate" class="gate">
+        <div class="gate-symbol" aria-hidden="true">⌁</div>
+        <div class="kicker">SECURE ACCESS</div>
+        <h1>Collect links.<br><em>See them live.</em></h1>
+        <p>One private workspace for collecting and organizing links. Updates appear automatically — no refresh, no redeploy.</p>
+        <form id="unlockForm" class="unlock-form">
+          <label for="accessKey">Workspace access key</label>
+          <div class="unlock-row"><input id="accessKey" type="password" autocomplete="off" placeholder="Enter your private access key" required><button type="submit" class="primary-btn">Unlock <span aria-hidden="true">→</span></button></div>
+        </form>
+        <p class="form-note" id="gateMessage" role="status">The key is configured on the server. Never put it in your GitHub files.</p>
+      </section>
+
+      <section id="workspace" hidden>
+        <div class="hero">
+          <div><div class="kicker">LIVE LINK OPERATIONS</div><h1>Your links.<br><em>One place.</em></h1><p>Collect, categorize, and export in real time. New additions appear here automatically.</p></div>
+          <div class="hero-orb" aria-hidden="true"><span>↗</span><small>IN SYNC</small></div>
+        </div>
+
+        <div id="storageNotice" class="storage-notice" hidden role="status"><strong>Temporary storage active.</strong> This server is using memory, so links will be lost when it restarts. Add a PostgreSQL database for persistent storage.</div>
+
+        <div class="stats">
+          <div class="stat"><span>TOTAL LINKS</span><strong id="linkCount">0</strong><small>In this workspace</small></div>
+          <div class="stat"><span>CATEGORIES</span><strong id="categoryCount">0</strong><small>Organized groups</small></div>
+          <div class="stat"><span>LAST SYNC</span><strong id="lastSync" class="sync-stat">—</strong><small>Auto-refresh every 3s</small></div>
+        </div>
+
+        <div class="columns">
+          <section class="panel library">
+            <div class="panel-heading"><div><div class="kicker">LIBRARY</div><h2>Collected links</h2></div><div class="toolbar-right"><button type="button" id="exportJson" class="ghost-btn">↓ JSON</button><button type="button" id="exportCsv" class="ghost-btn">↓ CSV</button></div></div>
+            <div class="filters"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" placeholder="Search URLs, names, categories..." aria-label="Search links"></label><select id="categoryFilter" aria-label="Filter category"><option value="">All categories</option></select></div>
+            <div class="library-meta"><span id="filterCount">0 results</span><span>NEWEST FIRST</span></div>
+            <div id="linkList" class="link-list" aria-live="polite"><div class="empty">No links yet. Add your first one using the panel.</div></div>
+          </section>
+
+          <aside class="entry-panel">
+            <section class="panel add-panel">
+              <div class="kicker">ADD A LINK</div>
+              <h2>Found something?</h2>
+              <p>Save it to the shared collection immediately.</p>
+              <form id="addForm">
+                <label for="newUrl">URL <span class="required">*</span></label>
+                <input id="newUrl" name="url" type="text" inputmode="url" placeholder="https://example.com" required>
+                <label for="newLabel">Name <small>optional</small></label>
+                <input id="newLabel" name="label" placeholder="Short description" maxlength="120">
+                <label for="newCategory">Category</label>
+                <input id="newCategory" name="category" placeholder="Unsorted" maxlength="60" list="categoryHints">
+                <datalist id="categoryHints"></datalist>
+                <label for="newNotes">Notes <small>optional</small></label>
+                <textarea id="newNotes" name="notes" rows="3" placeholder="Where you found it, what it does..." maxlength="600"></textarea>
+                <button type="submit" class="primary-btn wide" id="addButton">+ Add to collection</button>
+              </form>
+            </section>
+            <section class="panel bulk-panel">
+              <div class="kicker">QUICK IMPORT</div><h2>Paste multiple</h2>
+              <p>One URL per line. Duplicates are automatically skipped.</p>
+              <form id="bulkForm">
+                <label for="bulkUrls">Links</label>
+                <textarea id="bulkUrls" rows="5" placeholder="https://site-one.example&#10;https://site-two.example" required></textarea>
+                <label for="bulkCategory">Category for these links</label>
+                <input id="bulkCategory" placeholder="Unsorted" maxlength="60" list="categoryHints">
+                <button type="submit" class="ghost-btn wide" id="bulkButton">Import links ↗</button>
+              </form>
+            </section>
+          </aside>
+        </div>
+        <div id="message" class="toast" role="status" hidden></div>
+      </section>
+    </main>
+    <footer><span>LINK FETCHER / TEMPORARY WORKSPACE</span><span>Not connected to SuperProxy or ShadowLinks</span></footer>
+  </div>
+</body>
+</html>
